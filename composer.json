@@ -1,0 +1,17 @@
+{
+    "name": "vlabs/media-bundle",
+    "license": "proprietary",
+    "type": "symfony-bundle",
+    "autoload": {
+        "psr-4": {
+            "Vlabs\\MediaBundle\\": ""
+        }
+    },
+    "require": {
+        "php": ">=5.5.9",
+        "symfony/symfony": "3.0.*",
+        "oneup/flysystem-bundle": "^1.3",
+        "vich/uploader-bundle": "dev-master",
+        "imagine/imagine": "^0.6.3"
+    }
+}

@@ -1,0 +1,54 @@
+<?xml version="1.0" ?>
+
+<container xmlns="http://symfony.com/schema/dic/services"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+
+    <parameters>
+        <parameter key="vlabs_media.manager.class">Vlabs\MediaBundle\Manager\MediaManager</parameter>
+        <parameter key="vlabs_media.event_subscribers.media_event_subscriber.class">Vlabs\MediaBundle\EventSubscriber\MediaEventSubscriber</parameter>
+        <parameter key="vlabs_media.event_subscribers.media_resize_subscriber.class">Vlabs\MediaBundle\EventSubscriber\MediaResizeSubscriber</parameter>
+        <parameter key="vlabs_media.manager.class">Vlabs\MediaBundle\Manager\MediaManager</parameter>
+        <parameter key="vlabs_media.queuing.sync.class">Vlabs\MediaBundle\Queuing\SyncQueuing</parameter>
+        <parameter key="vlabs_media.queuing.jmsjob.class">Vlabs\MediaBundle\Queuing\JmsJobQueuing</parameter>
+        <parameter key="vlabs_media.twig.extension.media.class">Vlabs\MediaBundle\Twig\Extension\MediaExtension</parameter>
+        <parameter key="vlabs_media.queuing_chain.class">Vlabs\MediaBundle\Queuing\QueuingChain</parameter>
+    </parameters>
+
+    <services>
+        <service id="vlabs_media.manager" class="%vlabs_media.manager.class%">
+            <argument>%vlabs_media.config%</argument>
+            <argument type="service" id="vlabs_media.queuing_chain"/>
+            <argument type="service" id="vich_uploader.storage.flysystem"/>
+        </service>
+
+        <service id="vlabs_media.event_subscribers.media_event_subscriber"
+                 class="%vlabs_media.event_subscribers.media_event_subscriber.class%">
+            <argument type="service" id="vlabs_media.manager"/>
+            <tag name="kernel.event_subscriber"/>
+        </service>
+
+        <service id="vlabs_media.event_subscribers.media_resize_subscriber"
+                 class="%vlabs_media.event_subscribers.media_resize_subscriber.class%">
+            <argument>%vlabs_media.config%</argument>
+            <argument type="service" id="vlabs_media.manager"/>
+            <tag name="doctrine.event_subscriber"/>
+        </service>
+
+        <service id="vlabs_media.twig.extension.media" class="%vlabs_media.twig.extension.media.class%" public="false">
+            <argument type="service" id="vlabs_media.manager"/>
+            <argument type="service" id="templating.helper.assets"/>
+            <tag name="twig.extension"/>
+        </service>
+
+        <service id="vlabs_media.queuing_chain" class="%vlabs_media.queuing_chain.class%"/>
+
+        <service id="vlabs_media.queuing.sync" class="%vlabs_media.queuing.sync.class%">
+            <tag name="vlabs_media.queuing" alias="sync"/>
+        </service>
+
+        <service id="vlabs_media.queuing.jmsjob" class="%vlabs_media.queuing.jmsjob.class%">
+            <tag name="vlabs_media.queuing" alias="jmsjob"/>
+        </service>
+    </services>
+</container>
