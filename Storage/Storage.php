@@ -10,4 +10,15 @@ class Storage extends FlysystemStorage
     {
         return $this->mountManager->getFilesystem($key);
     }
+
+    public function resolveStream($obj, $fieldName, $className = null)
+    {
+        $path = $this->resolvePath($obj, $fieldName, $className);
+        if (empty($path)) {
+            return;
+        }
+        $mapping = $this->factory->fromField($obj, $fieldName, $className);
+        $fs = $this->getFilesystem($mapping);
+        return $fs->readStream($path);
+    }
 }
