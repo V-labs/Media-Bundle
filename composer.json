@@ -1,5 +1,5 @@
 {
-    "name": "vlabs/media-bundle",
+    "name": "vlabs/mediabundle",
     "license": "proprietary",
     "type": "symfony-bundle",
     "autoload": {
