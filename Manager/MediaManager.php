@@ -128,12 +128,9 @@ class MediaManager implements MediaManagerInterface
      */
     public function hasMedia(MediaInterface $media, $thumb = false)
     {
-        if (!isset($this->config['resize'][$media->getKey()])) return true;
+        $fs = $this->storage->getFileSystemFromKey($media->getKey());
 
-        $fsKey = $this->config['resize'][$media->getKey()]['filesystem'];
-        $fs = $this->storage->getFileSystemFromKey($fsKey);
-
-        if ($thumb) {
+        if ($thumb && isset($this->config['resize'][$media->getKey()])) {
             $urlPrefix = $this->config['resize'][$media->getKey()]['thumbs'][$thumb]['uri_prefix'];
             return $fs->has(sprintf('%s/%s', $urlPrefix, $media->getFilename()));
         }
@@ -145,17 +142,18 @@ class MediaManager implements MediaManagerInterface
      */
     public function deleteMedia(MediaInterface $media)
     {
-        $fsKey = $this->config['resize'][$media->getKey()]['filesystem'];
-        $fs = $this->storage->getFileSystemFromKey($fsKey);
+        $fs = $this->storage->getFileSystemFromKey($media->getKey());
 
         if($fs->has($media->getFilename())) {
             $fs->delete($media->getFilename());
         }
 
-        foreach($this->config['resize'][$media->getKey()]['thumbs'] as $config) {
-            $filePath = sprintf('%s/%s', $config['uri_prefix'], $media->getFilename());
-            if($fs->has($filePath)){
-                $fs->delete($filePath);
+        if (isset($this->config['resize'][$media->getKey()])) {
+            foreach($this->config['resize'][$media->getKey()]['thumbs'] as $config) {
+                $filePath = sprintf('%s/%s', $config['uri_prefix'], $media->getFilename());
+                if($fs->has($filePath)){
+                    $fs->delete($filePath);
+                }
             }
         }
     }
