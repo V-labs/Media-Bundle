@@ -7,7 +7,7 @@
             <generator strategy="AUTO"/>
         </id>
         <field name="path" type="string" length="255"/>
-        <field name="filename" type="string" length="100"/>
-        <field name="mimeType" type="string" length="50"/>
+        <field name="filename" type="string" length="255"/>
+        <field name="mimeType" type="string" length="255"/>
     </mapped-superclass>
 </doctrine-mapping>

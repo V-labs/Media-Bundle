@@ -21,4 +21,23 @@ class MediaRepository extends \Doctrine\ORM\EntityRepository
             ->getQuery()
             ->getResult();
     }
+
+    public function findByMimeTypes($mimeTypes)
+    {
+        $qb = $this->_em->createQueryBuilder();
+        $qb
+            ->select('m')
+            ->from($this->_entityName, 'm');
+
+        $orX = $qb->expr()->orX();
+
+        foreach ($mimeTypes as $mimeType) {
+            $orX->add($qb->expr()->like('m.mimeType', $qb->expr()->literal($mimeType)));
+        }
+
+        return $qb->where($orX)
+            ->addOrderBy('m.filename')
+            ->getQuery()
+            ->getResult();
+    }
 }
