@@ -31,7 +31,7 @@ abstract class Media implements MediaInterface
      * NOTE: This is not a mapped field of entity metadata, just a simple property.
      * @var File
      */
-    private $mediaFile;
+    protected $mediaFile;
 
     /**
      * Get id
