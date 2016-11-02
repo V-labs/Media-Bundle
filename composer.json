@@ -9,7 +9,6 @@
     },
     "require": {
         "php": ">=5.3.9",
-        "symfony/symfony": "~2.8 || ~3.0",
         "oneup/flysystem-bundle": "~1.4.1",
         "vich/uploader-bundle": "~0.14.0",
         "imagine/imagine": "~0.6.3"
