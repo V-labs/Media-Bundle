@@ -5,12 +5,13 @@ namespace Vlabs\MediaBundle\Form;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Vich\UploaderBundle\Form\Type\VichFileType;
 
 class MediaType extends AbstractType
 {
     private $dataClass;
 
-    function __construct($dataClass)
+    function __construct($dataClass = null)
     {
         $this->dataClass = $dataClass;
     }
@@ -22,7 +23,7 @@ class MediaType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('mediaFile', 'vich_file', [
+            ->add('mediaFile', VichFileType::class, [
                 'required' => false
             ])
         ;

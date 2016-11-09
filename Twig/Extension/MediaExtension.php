@@ -2,19 +2,19 @@
 
 namespace Vlabs\MediaBundle\Twig\Extension;
 
+use Symfony\Component\Asset\Packages;
 use Vlabs\MediaBundle\Manager\MediaManagerInterface;
 use Vlabs\MediaBundle\MediaInterface;
-use Symfony\Bundle\FrameworkBundle\Templating\Helper\AssetsHelper;
 
 class MediaExtension extends \Twig_Extension
 {
     private $mediaManager;
-    private $assetsHelper;
+    private $packages;
 
-    public function __construct(MediaManagerInterface $manager, AssetsHelper $assetsHelper)
+    public function __construct(MediaManagerInterface $manager, Packages $packages)
     {
         $this->mediaManager = $manager;
-        $this->assetsHelper = $assetsHelper;
+        $this->packages = $packages;
     }
 
     /**
@@ -50,6 +50,6 @@ class MediaExtension extends \Twig_Extension
         if ($this->mediaManager->hasMedia($media, $thumb)) {
             return $this->mediaManager->getUri($media, $absolute, $thumb);
         }
-        return $this->assetsHelper->getUrl('/bundles/vlabsmedia/images/loader.svg');
+        return $this->packages->getUrl('/bundles/vlabsmedia/images/loader.svg');
     }
 }

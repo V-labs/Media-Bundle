@@ -37,7 +37,7 @@
 
         <service id="vlabs_media.twig.extension.media" class="%vlabs_media.twig.extension.media.class%" public="false">
             <argument type="service" id="vlabs_media.manager"/>
-            <argument type="service" id="templating.helper.assets"/>
+            <argument type="service" id="assets.packages"/>
             <tag name="twig.extension"/>
         </service>
 
