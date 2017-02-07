@@ -1,13 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
-<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping"
-                  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-                  xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
-    <mapped-superclass name="Vlabs\MediaBundle\Entity\Media" repository-class="Vlabs\MediaBundle\Repository\Media">
+
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping">
+
+    <mapped-superclass name="Vlabs\MediaBundle\Entity\Media"></mapped-superclass>
+
+    <entity name="Vlabs\MediaBundle\Entity\Media" inheritance-type="SINGLE_TABLE">
+
         <id name="id" type="integer" column="id">
             <generator strategy="AUTO"/>
         </id>
-        <field name="path" type="string" length="255"/>
-        <field name="filename" type="string" length="255"/>
-        <field name="mimeType" type="string" length="255"/>
-    </mapped-superclass>
+
+        <field name="path" type="string" column="path" length="255"/>
+        <field name="filename" type="string" column="filename" length="255"/>
+        <field name="mimeType" type="string" column="mime_type" length="255"/>
+    </entity>
+
 </doctrine-mapping>
