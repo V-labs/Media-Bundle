@@ -16,7 +16,7 @@
     </parameters>
 
     <services>
-        <service id="vlabs_media.manager" class="%vlabs_media.manager.class%">
+        <service id="vlabs_media.manager" class="%vlabs_media.manager.class%" public="true">
             <argument>%vlabs_media.config%</argument>
             <argument type="service" id="vlabs_media.queuing_chain"/>
             <argument type="service" id="vich_uploader.storage.flysystem"/>
