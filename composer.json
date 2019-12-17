@@ -12,6 +12,7 @@
         "symfony/framework-bundle": "~3.3|~4.0",
         "oneup/flysystem-bundle": "~3.0",
         "vich/uploader-bundle": "~1.7",
-        "imagine/imagine": "~1.0"
+        "imagine/imagine": "~1.0",
+        "twig/twig": "~2.12|~3.0"
     }
 }
