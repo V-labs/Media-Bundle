@@ -3,35 +3,32 @@
 namespace Vlabs\MediaBundle\Entity;
 
 use Symfony\Component\HttpFoundation\File\File;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Vlabs\MediaBundle\MediaInterface;
 
 abstract class Media implements MediaInterface
 {
     /**
-     * @var integer
-     */
-    private $id;
-
-    /**
-     * @var string
-     */
-    private $path;
-
-    /**
-     * @var string
-     */
-    private $filename;
-
-    /**
-     * @var string
-     */
-    private $mimeType;
-
-    /**
      * NOTE: This is not a mapped field of entity metadata, just a simple property.
      * @var File
      */
     protected $mediaFile;
+    /**
+     * @var integer
+     */
+    private $id;
+    /**
+     * @var string
+     */
+    private $path;
+    /**
+     * @var string
+     */
+    private $filename;
+    /**
+     * @var string
+     */
+    private $mimeType;
 
     /**
      * Get id
@@ -46,7 +43,19 @@ abstract class Media implements MediaInterface
     /**
      * @inheritdoc
      */
-    function getKey() {}
+    function getKey()
+    {
+    }
+
+    /**
+     * Get path
+     *
+     * @return string
+     */
+    public function getPath()
+    {
+        return $this->path;
+    }
 
     /**
      * Set path
@@ -63,13 +72,13 @@ abstract class Media implements MediaInterface
     }
 
     /**
-     * Get path
+     * Get filename
      *
      * @return string
      */
-    public function getPath()
+    public function getFilename()
     {
-        return $this->path;
+        return $this->filename;
     }
 
     /**
@@ -87,13 +96,13 @@ abstract class Media implements MediaInterface
     }
 
     /**
-     * Get filename
+     * Get mimeType
      *
      * @return string
      */
-    public function getFilename()
+    public function getMimeType()
     {
-        return $this->filename;
+        return $this->mimeType;
     }
 
     /**
@@ -111,13 +120,11 @@ abstract class Media implements MediaInterface
     }
 
     /**
-     * Get mimeType
-     *
-     * @return string
+     * @return File
      */
-    public function getMimeType()
+    public function getMediaFile()
     {
-        return $this->mimeType;
+        return $this->mediaFile;
     }
 
     /**
@@ -127,18 +134,14 @@ abstract class Media implements MediaInterface
      * must be able to accept an instance of 'File' as the bundle will inject one here
      * during Doctrine hydration.
      *
-     * @param File|\Symfony\Component\HttpFoundation\File\UploadedFile $mediaFile
+     * @param File|UploadedFile $mediaFile
+     *
+     * @return $this
      */
     public function setMediaFile(File $mediaFile = null)
     {
         $this->mediaFile = $mediaFile;
-    }
 
-    /**
-     * @return File
-     */
-    public function getMediaFile()
-    {
-        return $this->mediaFile;
+        return $this;
     }
 }
