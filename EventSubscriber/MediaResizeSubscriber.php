@@ -1,10 +1,11 @@
 <?php
+
 namespace Vlabs\MediaBundle\EventSubscriber;
 
+use Doctrine\ORM\Event\LifecycleEventArgs;
 use Vlabs\MediaBundle\Manager\MediaManagerInterface;
 use Vlabs\MediaBundle\MediaInterface;
 use Doctrine\Common\EventSubscriber;
-use Doctrine\Common\Persistence\Event\LifecycleEventArgs;
 
 class MediaResizeSubscriber implements EventSubscriber
 {
