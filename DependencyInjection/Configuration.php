@@ -17,10 +17,9 @@ class Configuration implements ConfigurationInterface
      */
     public function getConfigTreeBuilder()
     {
-        $treeBuilder = new TreeBuilder();
-        $rootNode = $treeBuilder->root('vlabs_media');
+        $treeBuilder = new TreeBuilder('vlabs_media');
 
-        $rootNode
+        $treeBuilder->getRootNode()
             ->children()
                 ->scalarNode('default_base_url')->isRequired()->end()
                 ->arrayNode('resize')
