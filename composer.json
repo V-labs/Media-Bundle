@@ -9,7 +9,7 @@
     },
     "require": {
         "php": "~7.0",
-        "symfony/framework-bundle": "~3.3|~4.0",
+        "symfony/framework-bundle": ">=3.3",
         "oneup/flysystem-bundle": "~3.0",
         "vich/uploader-bundle": "~1.7",
         "imagine/imagine": "~1.0",
