@@ -18,15 +18,15 @@ class MediaType extends AbstractType
 
     /**
      * @param FormBuilderInterface $builder
-     * @param array $options
+     * @param array                $options
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
             ->add('mediaFile', VichFileType::class, [
-                'required' => false
-            ])
-        ;
+                'required' => false,
+                'label'    => false,
+            ]);
     }
 
     /**
@@ -36,7 +36,7 @@ class MediaType extends AbstractType
     {
         $resolver->setDefaults([
             'csrf_protection' => false,
-            'data_class' => $this->dataClass
+            'data_class'      => $this->dataClass
         ]);
     }
 
