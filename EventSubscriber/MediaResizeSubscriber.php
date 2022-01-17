@@ -33,16 +33,33 @@ class MediaResizeSubscriber implements EventSubscriber
     public function getSubscribedEvents()
     {
         return [
-            'postPersist'
+            'postPersist',
+            'postUpdate'
         ];
     }
 
     /**
-     * Trigger resize from media key
-     *
      * @param LifecycleEventArgs $eventArgs
      */
     public function postPersist(LifecycleEventArgs $eventArgs)
+    {
+        $this->onChange($eventArgs);
+    }
+
+    /**
+     * @param LifecycleEventArgs $eventArgs
+     */
+    public function postUpdate(LifecycleEventArgs $eventArgs)
+    {
+        $this->onChange($eventArgs);
+    }
+
+    /**
+     * @param LifecycleEventArgs $eventArgs
+     *
+     * @return void
+     */
+    private function onChange(LifecycleEventArgs $eventArgs)
     {
         if (!$eventArgs->getObject() instanceof MediaInterface) {
             return;
