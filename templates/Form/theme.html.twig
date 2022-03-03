@@ -1,0 +1,203 @@
+{%- block vich_image_row -%}
+    {%- set force_error = true -%}
+    {{- block('form_row') -}}
+{%- endblock -%}
+
+{%- block vich_file_row -%}
+    {%- set force_error = true -%}
+    {{- block('form_row') -}}
+{%- endblock -%}
+
+{% block file_widget -%}
+    {%- set type = type|default('file') -%}
+    {%- set attr = attr|merge({ style: ('display:none; ' ~ attr.style|default(''))|trim }) -%}
+    {%- set label_attr = label_attr|merge({
+        class: (label_attr.class|default('') ~ ' media_browse file-label')|trim,
+        style: (label_attr.style|default('') ~ (hide ? 'display:none;' : ''))
+    }) -%}
+    {{- block('form_widget_simple') -}}
+    {%- set input_lang = 'en' -%}
+    {% if app is defined and app.request is defined %}
+        {%- set input_lang = app.request.locale -%}
+    {%- endif -%}
+    <label
+        for="{{ form.vars.id }}"
+        lang="{{ input_lang }}"
+        {% with { attr: label_attr } %}{{ block('attributes') }}{% endwith %}
+    >
+        {%- if attr.placeholder is defined and attr.placeholder is not none -%}
+            {{- translation_domain is same as(false) ? attr.placeholder : attr.placeholder|trans({}, translation_domain) -}}
+        {% else %}
+            <span>
+                <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="16"
+                    height="16"
+                    fill="currentColor"
+                    viewBox="0 0 16 16"
+                >
+                  <path d="M.54 3.87.5 3a2 2 0 0 1 2-2h3.672a2 2 0 0 1 1.414.586l.828.828A2 2 0 0 0 9.828 3h3.982a2 2 0 0 1 1.992 2.181l-.637 7A2 2 0 0 1 13.174 14H2.826a2 2 0 0 1-1.991-1.819l-.637-7a1.99 1.99 0 0 1 .342-1.31zM2.19 4a1 1 0 0 0-.996 1.09l.637 7a1 1 0 0 0 .995.91h10.348a1 1 0 0 0 .995-.91l.637-7A1 1 0 0 0 13.81 4H2.19zm4.69-1.707A1 1 0 0 0 6.172 2H2.5a1 1 0 0 0-1 .981l.006.139C1.72 3.042 1.95 3 2.19 3h5.396l-.707-.707z"/>
+                </svg>
+            </span>
+        {%- endif -%}
+    </label>
+    {{ form_errors(form) }}
+{% endblock %}
+
+{%- block vich_image_widget -%}
+    {% set image_path = (image_uri and asset_helper is same as(true)) ? asset(image_uri) : image_uri %}
+    {% set allow_delete = form.parent.vars.allow_delete %}
+    <div
+        class="media"
+    >
+        {{- form_widget(form.file, {
+            hide: image_path is not null
+        }) -}}
+        <a
+            class="media_download"
+            href="{{ image_path }}"
+            download
+            style="{{ image_path ? 'background-image: url(\''~ image_path ~ '\')' : 'display:none' }}"
+        >
+            <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="16"
+                height="16"
+                fill="currentColor"
+                viewBox="0 0 16 16"
+            >
+                <path d="M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5a.5.5 0 0 1 1 0v2.5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-2.5a.5.5 0 0 1 .5-.5z"/>
+                <path d="M7.646 11.854a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 10.293V1.5a.5.5 0 0 0-1 0v8.793L5.354 8.146a.5.5 0 1 0-.708.708l3 3z"/>
+            </svg>
+        </a>
+        <label
+            class="media_remove button button--filled-secondary"
+            for="{{ form.delete is defined ? form.delete.vars.id }}"
+            style="{{ not allow_delete ? 'display:none' }}"
+        >
+            {%- if form.delete is defined -%}
+                <input
+                    style="display:none"
+                    type="checkbox"
+                    value="1"
+                    id="{{ form.delete.vars.id }}"
+                    name="{{ form.delete.vars.full_name }}"
+                    {%- if form.delete.vars.checked -%}checked{%- endif -%}
+                />
+                {% do form.delete.setRendered  %}
+            {%- endif -%}
+            <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="16"
+                height="16"
+                fill="currentColor"
+                viewBox="0 0 16 16"
+            >
+                <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
+                <path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z"/>
+            </svg>
+        </label>
+    </div>
+{%- endblock -%}
+
+{%- block vich_file_widget -%}
+    {% set file_uri = asset_helper is same as(true) ? asset(download_uri) : download_uri %}
+    {% set allow_delete = form.parent.vars.allow_delete %}
+    <div
+        class="media"
+    >
+        {{- form_widget(form.file, {
+            hide: file_uri is not null
+        }) -}}
+        <a
+            class="media_download"
+            href="{{ file_uri }}"
+            download
+            style="{{ file_uri ? '' : 'display:none' }}"
+        >
+            <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="16"
+                height="16"
+                fill="currentColor"
+                viewBox="0 0 16 16"
+            >
+                <path d="M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5a.5.5 0 0 1 1 0v2.5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-2.5a.5.5 0 0 1 .5-.5z"/>
+                <path d="M7.646 11.854a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 10.293V1.5a.5.5 0 0 0-1 0v8.793L5.354 8.146a.5.5 0 1 0-.708.708l3 3z"/>
+            </svg>
+        </a>
+        <label
+            class="media_remove button button--filled-secondary"
+            for="{{ form.delete is defined ? form.delete.vars.id }}"
+            style="{{ not allow_delete ? 'display:none' }}"
+        >
+            {%- if form.delete is defined -%}
+                <input
+                    style="display:none"
+                    type="checkbox"
+                    value="1"
+                    id="{{ form.delete.vars.id }}"
+                    name="{{ form.delete.vars.full_name }}"
+                    {%- if form.delete.vars.checked -%}checked{%- endif -%}
+                />
+                {% do form.delete.setRendered  %}
+            {%- endif -%}
+            <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="16"
+                height="16"
+                fill="currentColor"
+                viewBox="0 0 16 16"
+            >
+                <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
+                <path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z"/>
+            </svg>
+        </label>
+    </div>
+{%- endblock -%}
+
+{%- block media_widget -%}
+    {%- set attr = attr|merge({
+        'data-component': 'media'
+    }) -%}
+    {{- block('form_widget') -}}
+{%-  endblock -%}
+
+{%- block media_row -%}
+    {% set row_attr = { 'data-index': name }|merge(attr) %}
+    {{- block('form_row') -}}
+{% endblock media_row %}
+
+{%- block media_collection_row -%}
+    {% if prototype is defined and not prototype.rendered %}
+        {%- set row_attr = row_attr|merge({'data-prototype': form_row(prototype) }) -%}
+        {%- set row_attr = row_attr|merge({'data-prototype-name': prototype.vars.name }) -%}
+        {%- set row_attr = row_attr|merge({'data-prototype-container': '#'~id }) -%}
+        {%- set row_attr = row_attr|merge({'data-prototype-entries': form.children|length }) -%}
+    {% endif %}
+    <fieldset
+        class="media-collection"
+        {% with { attr: row_attr } %}{{ block('attributes') }}{% endwith %}
+    >
+        {{- block('form_label') -}}
+        {{- block('form_widget') -}}
+        {% if allow_add|default(false) %}
+            <button
+                type="button"
+                class="media-collection_add"
+                data-add-collection-entry="#{{ id }}"
+            >
+                <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="16"
+                    height="16"
+                    fill="currentColor"
+                    viewBox="0 0 16 16"
+                >
+                    <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z"/>
+                </svg>
+            </button>
+        {% endif %}
+        {{- block('form_errors') -}}
+    </fieldset>
+{%- endblock media_collection_row -%}

@@ -1,0 +1,46 @@
+<?xml version="1.0" ?>
+
+<container
+    xmlns="http://symfony.com/schema/dic/services"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd"
+>
+    <services>
+        <service
+            id="Vlabs\MediaBundle\Storage\Storage"
+            decorates="vich_uploader.storage.file_system"
+            public="false"
+        >
+            <argument type="service" id="vich_uploader.property_mapping_factory"/>
+            <argument type="service" id="oneup_flysystem.mount_manager"/>
+        </service>
+
+        <service id="Vlabs\MediaBundle\Queuing\QueuingChain" public="false" />
+        <service id="vlabs_media.queuing_chain" alias="Vlabs\MediaBundle\Queuing\QueuingChain" public="true" />
+
+        <service id="Vlabs\MediaBundle\Queuing\SyncQueuing">
+            <tag name="vlabs_media.queuing" alias="sync"/>
+        </service>
+
+        <service id="Vlabs\MediaBundle\Queuing\JmsJobQueuing">
+            <tag name="vlabs_media.queuing" alias="jmsjob"/>
+        </service>
+
+        <service id="Vlabs\MediaBundle\Manager\MediaManager" public="true">
+            <argument type="service" id="Vlabs\MediaBundle\Queuing\QueuingChain"/>
+            <argument type="service" id="Vlabs\MediaBundle\Storage\Storage"/>
+            <argument>%vlabs_media.config%</argument>
+        </service>
+
+        <service id="Vlabs\MediaBundle\EventSubscriber\MediaEventSubscriber">
+            <argument type="service" id="Vlabs\MediaBundle\Manager\MediaManager"/>
+            <tag name="kernel.event_subscriber"/>
+        </service>
+
+        <service id="Vlabs\MediaBundle\EventSubscriber\MediaResizeSubscriber">
+            <argument>%vlabs_media.config%</argument>
+            <argument type="service" id="Vlabs\MediaBundle\Manager\MediaManager"/>
+            <tag name="doctrine.event_subscriber"/>
+        </service>
+    </services>
+</container>
