@@ -10,17 +10,25 @@
     ],
     "autoload": {
         "psr-4": {
-            "Vlabs\\MediaBundle\\": ""
-        },
-        "exclude-from-classmap": [
-            "/Tests/"
-        ]
+            "Vlabs\\MediaBundle\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Vlabs\\MediaBundle\\Tests\\": "tests/"
+        }
     },
     "require": {
         "php": "^7.0|^8.0",
+        "ext-gd": "*",
         "symfony/framework-bundle": ">=5.4",
         "oneup/flysystem-bundle": ">=3.0",
         "vich/uploader-bundle": ">=1.7",
-        "imagine/imagine": ">=1.2.4"
+        "imagine/imagine": ">=1.2.4",
+        "doctrine/orm": "^2.11",
+        "symfony/form": "^4.4 || ^5.0"
+    },
+    "suggest": {
+        "symfony/asset": "^5.4"
     }
 }
