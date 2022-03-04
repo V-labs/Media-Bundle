@@ -47,70 +47,63 @@
 {%- block vich_image_widget -%}
     {% set image_path = (image_uri and asset_helper is same as(true)) ? asset(image_uri) : image_uri %}
     {% set allow_delete = form.parent.vars.allow_delete %}
-    <div
-        class="media"
+    {{- form_widget(form.file, {
+        hide: image_path is not null
+    }) -}}
+    <a
+        class="media_download"
+        href="{{ image_path }}"
+        download
+        style="{{ image_path ? 'background-image: url(\''~ image_path ~ '\')' : 'display:none' }}"
     >
-        {{- form_widget(form.file, {
-            hide: image_path is not null
-        }) -}}
-        <a
-            class="media_download"
-            href="{{ image_path }}"
-            download
-            style="{{ image_path ? 'background-image: url(\''~ image_path ~ '\')' : 'display:none' }}"
+        <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="16"
+            height="16"
+            fill="currentColor"
+            viewBox="0 0 16 16"
         >
-            <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="16"
-                height="16"
-                fill="currentColor"
-                viewBox="0 0 16 16"
-            >
-                <path d="M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5a.5.5 0 0 1 1 0v2.5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-2.5a.5.5 0 0 1 .5-.5z"/>
-                <path d="M7.646 11.854a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 10.293V1.5a.5.5 0 0 0-1 0v8.793L5.354 8.146a.5.5 0 1 0-.708.708l3 3z"/>
-            </svg>
-        </a>
-        <label
-            class="media_remove button button--filled-secondary"
-            for="{{ form.delete is defined ? form.delete.vars.id }}"
-            style="{{ not allow_delete ? 'display:none' }}"
+            <path d="M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5a.5.5 0 0 1 1 0v2.5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-2.5a.5.5 0 0 1 .5-.5z"/>
+            <path d="M7.646 11.854a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 10.293V1.5a.5.5 0 0 0-1 0v8.793L5.354 8.146a.5.5 0 1 0-.708.708l3 3z"/>
+        </svg>
+    </a>
+    <label
+        class="media_remove button button--filled-secondary"
+        for="{{ form.delete is defined ? form.delete.vars.id }}"
+        style="{{ not allow_delete ? 'display:none' }}"
+    >
+        {%- if form.delete is defined -%}
+            <input
+                style="display:none"
+                type="checkbox"
+                value="1"
+                id="{{ form.delete.vars.id }}"
+                name="{{ form.delete.vars.full_name }}"
+                {%- if form.delete.vars.checked -%}checked{%- endif -%}
+            />
+            {% do form.delete.setRendered  %}
+        {%- endif -%}
+        <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="16"
+            height="16"
+            fill="currentColor"
+            viewBox="0 0 16 16"
         >
-            {%- if form.delete is defined -%}
-                <input
-                    style="display:none"
-                    type="checkbox"
-                    value="1"
-                    id="{{ form.delete.vars.id }}"
-                    name="{{ form.delete.vars.full_name }}"
-                    {%- if form.delete.vars.checked -%}checked{%- endif -%}
-                />
-                {% do form.delete.setRendered  %}
-            {%- endif -%}
-            <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="16"
-                height="16"
-                fill="currentColor"
-                viewBox="0 0 16 16"
-            >
-                <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
-                <path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z"/>
-            </svg>
-        </label>
-    </div>
+            <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
+            <path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z"/>
+        </svg>
+    </label>
 {%- endblock -%}
 
 {%- block vich_file_widget -%}
     {% set file_uri = asset_helper is same as(true) ? asset(download_uri) : download_uri %}
     {% set allow_delete = form.parent.vars.allow_delete %}
-    <div
-        class="media"
-    >
         {{- form_widget(form.file, {
             hide: file_uri is not null
         }) -}}
         <a
-            class="media_download"
+            class="media_download btn btn-outline-primary"
             href="{{ file_uri }}"
             download
             style="{{ file_uri ? '' : 'display:none' }}"
@@ -153,27 +146,30 @@
                 <path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z"/>
             </svg>
         </label>
-    </div>
 {%- endblock -%}
 
 {%- block media_widget -%}
-    {%- set attr = attr|merge({
-        'data-component': 'media'
-    }) -%}
-    {{- block('form_widget') -}}
+    {{ form_widget(form.mediaFile, {
+        attr: {
+            'data-component': 'media',
+            'class': 'media ' ~ attr.class|default('')
+        }|merge(attr)
+    }) -}}
 {%-  endblock -%}
 
 {%- block media_row -%}
-    {% set row_attr = { 'data-index': name }|merge(attr) %}
-    {{- block('form_row') -}}
-{% endblock media_row %}
+    {% set row_attr = {
+        'data-component': 'media',
+        'class': 'media ' ~ attr.class|default('')
+    }|merge(attr) %}
+    {{ block('form_row') }}
+{%-  endblock -%}
 
 {%- block media_collection_row -%}
     {% if prototype is defined and not prototype.rendered %}
         {%- set row_attr = row_attr|merge({'data-prototype': form_row(prototype) }) -%}
         {%- set row_attr = row_attr|merge({'data-prototype-name': prototype.vars.name }) -%}
         {%- set row_attr = row_attr|merge({'data-prototype-container': '#'~id }) -%}
-        {%- set row_attr = row_attr|merge({'data-prototype-entries': form.children|length }) -%}
     {% endif %}
     <fieldset
         class="media-collection"
@@ -184,7 +180,7 @@
         {% if allow_add|default(false) %}
             <button
                 type="button"
-                class="media-collection_add"
+                class="media-collection_add btn btn-outline-primary"
                 data-add-collection-entry="#{{ id }}"
             >
                 <svg
